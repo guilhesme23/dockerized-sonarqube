@@ -1,0 +1,9 @@
+version: '3.3'
+services:
+  scanner:
+    build:
+      context: .
+    volumes:
+      - ./sonar-scanner.properties:/usr/scanner/sonar-scanner/conf/sonar-scanner.properties
+      - ./:/usr/project
+    network_mode: host
