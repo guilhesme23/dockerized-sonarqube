@@ -2,6 +2,7 @@ stages:
   - build
   - publish
 
+
 variables:
   IMAGE_SONAR: "sonarqube"
   IMAGE_SCANNER: "sonarscanner"
