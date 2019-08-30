@@ -1,0 +1,66 @@
+stages:
+  - build
+  - publish
+
+variables:
+  IMAGE_SONAR: "sonarqube"
+  IMAGE_SCANNER: "sonarscanner"
+  IMAGE_VERSION: $CI_COMMIT_SHORT_SHA
+
+before_script:
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+
+build sonar:
+  stage: build
+  services: 
+    - docker:dind
+  script:
+    - docker build -t $IMAGE_SONAR:$IMAGE_VERSION .
+  only:
+    - devel
+    - master
+
+build scanner:
+  stage: build
+  services: 
+    - docker:dind
+  script:
+    - docker build -t $IMAGE_SCANNER:$IMAGE_VERSION ./scanner
+  only:
+    - devel
+    - master
+
+publish stable:
+  stage: publish
+  services: 
+    - docker:dind
+  variables:
+    IMAGE_VERSION: stable
+  script:
+    - docker build -t $IMAGE_SONAR:$IMAGE_VERSION .
+    - docker build -t $IMAGE_SCANNER:$IMAGE_VERSION ./scanner
+    - docker push $IMAGE_SONAR:$IMAGE_VERSION
+    - docker push $IMAGE_SCANNER:$IMAGE_VERSION
+  only:
+    - tags
+
+dockerhub:
+  stage: publish
+  services: 
+    - docker:dind
+  before_script:
+    - if test -z "$CI_COMMIT_TAG" then
+        export IMAGE_VERSION=$CI_COMMIT_SHORT_SHA
+      else
+        export IMAGE_VERSION=$CI_COMMIT_TAG
+      fi
+    - docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASSWORD
+  script:
+    - docker build -t $IMAGE_SONAR:$IMAGE_VERSION .
+    - docker build -t $IMAGE_SCANNER:$IMAGE_VERSION ./scanner
+    - docker push $IMAGE_SONAR:$IMAGE_VERSION
+    - docker push $IMAGE_SCANNER:$IMAGE_VERSION
+  only:
+    - devel
+    - master
+    - tags
