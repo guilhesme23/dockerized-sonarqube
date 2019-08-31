@@ -41,10 +41,10 @@ publish stable:
   variables:
     IMAGE_VERSION: stable
   script:
-    - docker build -t $IMAGE_SONAR:$IMAGE_VERSION .
-    - docker build -t $IMAGE_SCANNER:$IMAGE_VERSION ./scanner
-    - docker push $IMAGE_SONAR:$IMAGE_VERSION
-    - docker push $IMAGE_SCANNER:$IMAGE_VERSION
+    - docker build -t $CI_REGISTRY/$IMAGE_SONAR:$IMAGE_VERSION .
+    - docker build -t $CI_REGISTRY/$IMAGE_SCANNER:$IMAGE_VERSION ./scanner
+    - docker push $CI_REGISTRY/$IMAGE_SONAR:$IMAGE_VERSION
+    - docker push $CI_REGISTRY/$IMAGE_SCANNER:$IMAGE_VERSION
   only:
     - tags
 
