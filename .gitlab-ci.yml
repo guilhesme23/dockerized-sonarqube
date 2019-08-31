@@ -54,7 +54,8 @@ dockerhub:
   services: 
     - docker:dind
   before_script:
-    - if test -z "$CI_COMMIT_TAG" then
+    - |
+      if test -z "$CI_COMMIT_TAG" then
         export IMAGE_VERSION=$CI_COMMIT_SHORT_SHA
       else
         export IMAGE_VERSION=$CI_COMMIT_TAG
