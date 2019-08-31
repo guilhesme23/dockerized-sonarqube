@@ -64,8 +64,8 @@ dockerhub:
     - *tag_script
     - docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASSWORD
   script:
-    - docker build -t $IMAGE_SONAR:$IMAGE_VERSION .
-    - docker build -t $IMAGE_SCANNER:$IMAGE_VERSION ./scanner
+    - docker build -t $DOCKERHUB_USER/$IMAGE_SONAR:$IMAGE_VERSION .
+    - docker build -t $DOCKERHUB_USER/$IMAGE_SCANNER:$IMAGE_VERSION ./scanner
     - docker push $DOCKERHUB_USER/$IMAGE_SONAR:$IMAGE_VERSION
     - docker push $DOCKERHUB_USER/$IMAGE_SCANNER:$IMAGE_VERSION
   only:
