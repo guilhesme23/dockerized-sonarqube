@@ -13,6 +13,7 @@ before_script:
 
 build sonar:
   stage: build
+  image: docker:stable
   services: 
     - docker:dind
   script:
@@ -23,6 +24,7 @@ build sonar:
 
 build scanner:
   stage: build
+  image: docker:stable
   services: 
     - docker:dind
   script:
@@ -33,6 +35,7 @@ build scanner:
 
 publish stable:
   stage: publish
+  image: docker:stable
   services: 
     - docker:dind
   variables:
@@ -47,6 +50,7 @@ publish stable:
 
 dockerhub:
   stage: publish
+  image: docker:stable
   services: 
     - docker:dind
   before_script:
